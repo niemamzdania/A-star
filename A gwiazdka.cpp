@@ -26,6 +26,10 @@ int main(){
 
     Algorytm();
 
+    cout << endl << endl << "Zakonczono dzialanie programu. Aby zakonczyc, wcisnij dowolny klawisz" << endl;
+
+    system("pause");
+
     return 0;
 }
 
@@ -51,11 +55,12 @@ void Algorytm(){
             cout << mapa[i][j] << " ";
         cout << endl;
     }
-    cout << endl << endl;
+    cout << endl;
 
 
     //#######################################################
     //WYKONANIE ALGORYTMU
+
 
     //Liczymy wspolrzedne od lewego gornego rogu
     //Wpolrzedne punktu startowego i koncowego
@@ -202,7 +207,7 @@ void Algorytm(){
         xPoz = xPom;
         yPoz = yPom;
 
-        info[yPom][xPom].status = 2;
+        info[yPoz][xPoz].status = 2;
 
         int licznik = 0;
 
@@ -214,8 +219,10 @@ void Algorytm(){
             }
         }
 
-        if(licznik == 0) {
-            cout << "Nie mozna znalezc drogi do celu. Beng." << endl;
+
+
+        if((licznik == 0) && !((info[yPoz-1][xPoz].status == 0) || (info[yPoz+1][xPoz].status == 0) || (info[yPoz][xPoz-1].status == 0) || (info[yPoz][xPoz+1].status == 0))){
+            cout << "Nie mozna znalezc drogi do celu." << endl;
             flaga = true;
             break;
         }
@@ -223,41 +230,43 @@ void Algorytm(){
 
     }
 
-    cout << endl << endl;
+    cout << endl;
     if (flaga == false) {
         cout << "Wracam do domu!" << endl;
         mapa[yStart][xStart] = 3;
         int zmiennaPomX = 0;
         int zmiennaPomY = 0;
 
-    while(!((xPoz == xStart) && (yPoz == yStart))){
-        mapa[yPoz][xPoz] = 3;
+        while(!((xPoz == xStart) && (yPoz == yStart))){
+            mapa[yPoz][xPoz] = 3;
 
 
-        zmiennaPomY = info[yPoz][xPoz].yRodzica;
-        zmiennaPomX = info[yPoz][xPoz].xRodzica;
+            zmiennaPomY = info[yPoz][xPoz].yRodzica;
+            zmiennaPomX = info[yPoz][xPoz].xRodzica;
 
-        xPoz = zmiennaPomX;
-        yPoz = zmiennaPomY;
+            xPoz = zmiennaPomX;
+            yPoz = zmiennaPomY;
+        }
+
+
+
+
+
+        //WYPISANIE SCIEZKI WYNIKOWEJ
+        for(int i = 0 ; i < wymiar ; i++){
+            for(int j = 0 ; j < wymiar ; j++)
+                cout << mapa[i][j] << " ";
+            cout << endl;
+        }
+
     }
-
-
 
     //#######################################################
 
 
-
-    //WYPISANIE SCIEZKI WYNIKOWEJ
-    for(int i = 0 ; i < wymiar ; i++){
-        for(int j = 0 ; j < wymiar ; j++)
-            cout << mapa[i][j] << " ";
-        cout << endl;
-    }
-
 }
 
 
-}
 
 //WCZYTYWANIE DANYCH Z PLIKU
 int** Wczytaj(string nazwa, int rozmiar){
