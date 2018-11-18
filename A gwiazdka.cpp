@@ -214,7 +214,7 @@ void Algorytm(){
         for(int i=0; i<wymiar; i++) {
             for(int j=0; j<wymiar; j++) {
                 if(info[i][j].status == 1) {
-                    licznik=licznik+1;;
+                    licznik=licznik+1;
                 }
             }
         }
@@ -279,7 +279,7 @@ int** Wczytaj(string nazwa, int rozmiar){
     for(int i = 0 ; i < rozmiar ; i++)
         tablica[i] = new int[rozmiar];
 
-    cout << "Nacisnij ENTER, aby wczytac plik  " << nazwa;
+    cout << "Nacisnij ENTER, aby wczytac plik " << nazwa;
     getchar();
 
     ifstream plik(nazwa.c_str());
