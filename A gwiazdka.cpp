@@ -86,6 +86,16 @@ void Algorytm(){
             info[i][j].status = mapa[i][j];
     }
 
+    double najmniejsza = NIESKONCZONOSC;
+
+    //Zmienne pomocnicze
+    int gora;
+    int dol;
+    int lewo;
+    int prawo;
+    int xPom;
+    int yPom;
+
 
     //Dodanie punktu startowego do listy zamknietej
     info[yStart][xStart].status = 2;
@@ -99,9 +109,23 @@ void Algorytm(){
     //Wykorzystujemy heurystyke Euklidesowa, liczymy wartosc f dla punktu startowego
     info[yStart][xStart].f = ObliczF(xPoz, yPoz, xCel, yCel, info[yStart][xStart].kosztDojscia);
 
-    bool flaga = false;
+    int licznik; //zlicza liczbe pol na sciezce otwartej
+
+
+    bool flaga = false; //jesli true - nie mozna znalezc drogi do celu
+
+
+    //Sprawdzenie, czy poczatkowe lub koncowe pole nie jest przeszkoda
+    if(mapa[yStart][xStart] == 5 || mapa[yCel][xCel] == 5)
+        flaga = true;
+
 
     while(!((xPoz == xCel) && (yPoz == yCel))){
+
+    if(flaga == true){
+        cout << "Nie mozna znalezc drogi do celu" << endl;
+        break;
+    }
 
         //DODAWANIE POL NA LISTE OTWARTA
         if(yPoz != 0 && info[yPoz-1][xPoz].status != 5 && info[yPoz-1][xPoz].status != 2){
@@ -119,7 +143,7 @@ void Algorytm(){
                 info[yPoz-1][xPoz].yRodzica = yPoz;
                 info[yPoz-1][xPoz].kosztDojscia = info[yPoz][xPoz].kosztDojscia + kosztRuchu;
                 info[yPoz-1][xPoz].f = ObliczF(xPoz, yPoz-1, xCel, yCel, info[yPoz][xPoz].kosztDojscia) + kosztRuchu;
-             //   cout << "Dodaje kratke y:" << yPoz-1 << " x:" << xPoz << " do listy otwartej. Rodzic y:" << info[yPoz-1][xPoz].yRodzica << " x:" << info[yPoz-1][xPoz].xRodzica << endl;
+                //cout << "Dodaje kratke y:" << yPoz-1 << " x:" << xPoz << " do listy otwartej. Rodzic y:" << info[yPoz-1][xPoz].yRodzica << " x:" << info[yPoz-1][xPoz].xRodzica << endl;
             }
         }
 
@@ -139,7 +163,7 @@ void Algorytm(){
                 info[yPoz+1][xPoz].yRodzica = yPoz;
                 info[yPoz+1][xPoz].kosztDojscia = info[yPoz][xPoz].kosztDojscia + kosztRuchu;
                 info[yPoz+1][xPoz].f = ObliczF(xPoz, yPoz+1, xCel, yCel, info[yPoz][xPoz].kosztDojscia) + kosztRuchu;
-           //     cout << "Dodaje kratke y:" << yPoz+1 << " x:" << xPoz << " do listy otwartej. Rodzic y:" << info[yPoz+1][xPoz].yRodzica << " x:" << info[yPoz+1][xPoz].xRodzica << endl;
+                //cout << "Dodaje kratke y:" << yPoz+1 << " x:" << xPoz << " do listy otwartej. Rodzic y:" << info[yPoz+1][xPoz].yRodzica << " x:" << info[yPoz+1][xPoz].xRodzica << endl;
             }
         }
 
@@ -159,7 +183,7 @@ void Algorytm(){
                 info[yPoz][xPoz-1].yRodzica = yPoz;
                 info[yPoz][xPoz-1].kosztDojscia = info[yPoz][xPoz].kosztDojscia + kosztRuchu;
                 info[yPoz][xPoz-1].f = ObliczF(xPoz-1, yPoz, xCel, yCel, info[yPoz][xPoz].kosztDojscia) + kosztRuchu;
-         //       cout << "Dodaje kratke y:" << yPoz << " x:" << xPoz-1 << " do listy otwartej. Rodzic y:" << info[yPoz][xPoz-1].yRodzica << " x:" << info[yPoz][xPoz-1].xRodzica << endl;
+                //cout << "Dodaje kratke y:" << yPoz << " x:" << xPoz-1 << " do listy otwartej. Rodzic y:" << info[yPoz][xPoz-1].yRodzica << " x:" << info[yPoz][xPoz-1].xRodzica << endl;
             }
         }
 
@@ -180,14 +204,14 @@ void Algorytm(){
                 info[yPoz][xPoz+1].yRodzica = yPoz;
                 info[yPoz][xPoz+1].kosztDojscia = info[yPoz][xPoz].kosztDojscia + kosztRuchu;
                 info[yPoz][xPoz+1].f = ObliczF(xPoz+1, yPoz, xCel, yCel, info[yPoz][xPoz].kosztDojscia) + kosztRuchu;
-       //         cout << "Dodaje kratke y:" << yPoz << " x:" << xPoz+1 << " do listy otwartej. Rodzic y:" << info[yPoz][xPoz+1].yRodzica << " x:" << info[yPoz][xPoz+1].xRodzica << endl;
+                //cout << "Dodaje kratke y:" << yPoz << " x:" << xPoz+1 << " do listy otwartej. Rodzic y:" << info[yPoz][xPoz+1].yRodzica << " x:" << info[yPoz][xPoz+1].xRodzica << endl;
             }
         }
 
         //DODAWANIE DO LISTY ZAMKNIETEJ
-        double najmniejsza = NIESKONCZONOSC;
-        int xPom = 0;
-        int yPom = 0;
+        najmniejsza = NIESKONCZONOSC;
+        xPom = 0;
+        yPom = 0;
 
 
         for(int i = 0 ; i < wymiar ; i++){
@@ -209,9 +233,11 @@ void Algorytm(){
 
         info[yPoz][xPoz].status = 2;
 
-        int licznik = 0;
 
-        for(int i=0; i<wymiar; i++) {
+        licznik = 0;
+
+
+        for(int i=0; i<wymiar; i++){
             for(int j=0; j<wymiar; j++) {
                 if(info[i][j].status == 1) {
                     licznik=licznik+1;
@@ -221,12 +247,19 @@ void Algorytm(){
 
 
 
-        if((licznik == 0) && !((info[yPoz-1][xPoz].status == 0) || (info[yPoz+1][xPoz].status == 0) || (info[yPoz][xPoz-1].status == 0) || (info[yPoz][xPoz+1].status == 0))){
-            cout << "Nie mozna znalezc drogi do celu." << endl;
-            flaga = true;
-            break;
-        }
+        if(licznik == 0){
 
+            gora = info[yPoz-1][xPoz].status;
+            dol = info[yPoz+1][xPoz].status;
+            lewo = info[yPoz][xPoz-1].status;
+            prawo = info[yPoz][xPoz+1].status;
+
+            if(!((gora == 0) || (dol == 0) || (lewo == 0) || (prawo == 0))){
+                cout << "Nie mozna znalezc drogi do celu." << endl;
+                flaga = true;
+                break;
+            }
+        }
 
     }
 
